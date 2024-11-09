@@ -1,4 +1,6 @@
-How to run 01.
+## Basic Go Server
+
+How to run it.
 
 ```bash
 go build
