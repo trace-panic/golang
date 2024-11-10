@@ -16,9 +16,13 @@ var NewBook models.Book
 func GetBooks(w http.ResponseWriter, r *http.Request) {
 	books := models.GetAllBooks()
 
-	res, _ := json.Marshal(books)
+	res, err := json.Marshal(books)
+	if err != nil {
+		http.Error(w, "Error marshalling books", http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
@@ -33,9 +37,13 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	book, _ := models.GetBookById(Id)
-	res, _ := json.Marshal(book)
+	res, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling book", http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
@@ -45,9 +53,13 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 	utils.ParseBody(r, CreateBook)
 
 	book := CreateBook.CreateBook()
-	res, _ := json.Marshal(book)
+	res, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling created book", http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(res)
 }
@@ -62,9 +74,13 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	book := models.DeleteBook(Id)
-	res, _ := json.Marshal(book)
+	res, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling deleted book", http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
@@ -92,9 +108,13 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 		book.Publication = UpdateBook.Publication
 	}
 	db.Save(&book)
-	res, _ := json.Marshal(book)
+	res, err := json.Marshal(book)
+	if err != nil {
+		http.Error(w, "Error marshalling updated book", http.StatusInternalServerError)
+		return
+	}
 
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
